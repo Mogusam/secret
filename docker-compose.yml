@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  secret_db:
+    #    container_name: secret_db
+    image: mysql:5.7
+    environment:
+      MYSQL_USER: user
+      MYSQL_PASSWORD: user
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: secret
+    ports:
+      - 3307:3306
+
+
+  secret-app:
+    container_name: secretapp
+    build: .
+    ports:
+      - "8080:8080"
+    depends_on:
+      - secret_db
+
+volumes:
+  mysql-data:
