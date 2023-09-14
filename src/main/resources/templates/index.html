@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <style>
+    .alert {
+      background-color: red; /* Set the background color to red */
+      color: white; /* Set text color to white (for better contrast) */
+      padding: 10px; /* Add some padding for spacing */
+      border: 2px solid darkred; /* Add a border for emphasis */
+      border-radius: 5px; /* Round the corners for a softer look */
+      width: 300px; /* Set the width of the alert div */
+      text-align: center; /* Center the text horizontally */
+      margin: 0 auto; /* Center the alert div horizontally */
+}
+
+       /* Define the CSS for the div with a perfect border */
+        .bordered-div {
+
+            display: table;
+            border: 2px solid #333; /* Border style, color, and width */
+            border-radius: 10px; /* Border radius for rounded corners */
+            padding: 20px; /* Optional padding for content within the div */
+            border-color: blue;
+
+
+    }
+
+    </style>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secret HTML Form</title>
+
+</head>
+<body>
+<h1>Secret Form</h1>
+<form action="/create-link" method="post">
+    <div th:if="${username != null}">
+        <h1>Welcome, <span th:text="${username}"></span>!</h1>
+
+    </div>
+    <div th:if="${key != null  and secret==null and error==null }">
+        <!--        <h2>  url:     <span th:text="${key}"></span>   </h2>-->
+        <h3>
+            <a th:href="${key}">Secret Link</a>
+        </h3>
+
+    </div>
+
+
+    <!-- Text Box Field -->
+    <div th:if="${key == null}">
+        <H3 for="textbox">Enter something:</H3><br>
+        <textarea style="width: 500px; height: 150px;" id="textbox" name="textbox" placeholder="Type here" required>
+        </textarea>
+        <br>
+
+        <!-- Submit Button -->
+        <button type="submit">Submit</button>
+    </div>
+    <!-- ERROR ---->
+    <div class="alert" th:if="${error != null}">
+        <H3><span th:text="${error}"/></H3><br>
+
+    </div>
+
+</form>
+
+
+<!-- copy text   ----->
+<div th:if="${key != null and error==null and secret==null}">
+    <input type="text" th:value="${key}" id="copyText" readonly>
+    <button id="copyButton">Copy to Clipboard</button>
+
+</div>
+
+<!-- Secret text -->
+<div th:if="${secret != null}">
+    <h2> Secret: <BR>
+</div>
+<div class="bordered-div" th:if="${secret != null}">
+    <span th:text="${secret}"></span>   </h2>
+</div>
+<script>
+    // Function to copy text to the clipboard
+    function copyToClipboard() {
+      // Select the text field
+      const copyText = document.getElementById("copyText");
+
+      // Select the text in the input field
+      copyText.select();
+      copyText.setSelectionRange(0, 99999); // For mobile devices
+
+      // Copy the selected text to the clipboard
+      document.execCommand("copy");
+
+      // Deselect the text field
+      copyText.blur();
+
+      // Change the button text to indicate successful copy
+      const copyButton = document.getElementById("copyButton");
+      copyButton.innerText = "Copied!";
+      setTimeout(() => {
+        copyButton.innerText = "Copy to Clipboard";
+      }, 2000); // Reset button text after 2 seconds
+    }
+
+    // Add a click event listener to the copy button
+    const copyButton = document.getElementById("copyButton");
+    copyButton.addEventListener("click", copyToClipboard);
+
+</script>
+
+</body>
+</html>
